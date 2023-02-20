@@ -61,10 +61,19 @@ export default defineComponent({
     improt() {
       let _ = this
       if (!(_.phrase && _.phrase.length)) {
+        _.$q.notify({
+            message: 'nothing to input',
+            color: 'negative',
+            position: 'center'
+        })
         return
       }
-      // const keys = generateMasterKeys(_.phrase)
-      const accountAddress = Address.create(_.phrase,'TS')
+      let key = _.phrase
+      if (_.currentType == 'Phrase') {
+        const keys = generateMasterKeys(_.phrase)
+        key = keys.publicKey
+      }
+      const accountAddress = Address.create(key,'TS')
       _.result = ''
       _.result += 'Public Key: ' + accountAddress.getPublicKey() + '\n'
       console.log(_.result)
